@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  DynamoDBTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: !Sub '${AWS::StackName}-table'
+      KeySchema:
+        - AttributeName: "key"
+          KeyType: "HASH"
+      AttributeDefinitions:
+        - AttributeName: "key"
+          AttributeType: "S"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+Outputs:
+  DynamoDBTable:
+    Value: !Ref DynamoDBTable
+    Description: "Table Name"
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "DynamoDBTable"]]
+  DynamoDBTableArn:
+    Value: !GetAtt DynamoDBTable.Arn
+    Description: "Table ARN"
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "DynamoDBTableArn"]]
