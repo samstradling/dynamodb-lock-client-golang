@@ -91,6 +91,7 @@ func (d *DynamoDBLockClient) dynamoHasLock() (bool, error) {
 	}
 
 	params := &dynamodb.ScanInput{
+		ConsistentRead:            aws.Bool(true),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
 		FilterExpression:          expr.Filter(),
