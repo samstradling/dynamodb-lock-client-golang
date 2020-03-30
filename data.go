@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
+	"go.uber.org/atomic"
 )
 
 // DynamoDBLockClient describes the fields for a lock client
@@ -15,6 +16,6 @@ type DynamoDBLockClient struct {
 	Identifier      string
 	Client          dynamodbiface.DynamoDBAPI
 	lockID          string
-	sendHeartbeats  bool
+	sendHeartbeats  atomic.Bool
 	lockError       error
 }

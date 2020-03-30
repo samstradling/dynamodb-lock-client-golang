@@ -33,7 +33,7 @@ func (d *DynamoDBLockClient) GetLock() (bool, error) {
 
 // StopHeartbeat stops sending lock renewal heartbeats, consider using RemoveLock
 func (d *DynamoDBLockClient) StopHeartbeat() {
-	d.sendHeartbeats = false
+	d.sendHeartbeats.Store(false)
 	return
 }
 
@@ -55,14 +55,14 @@ func (d *DynamoDBLockClient) LockError() error {
 
 func (d *DynamoDBLockClient) periodicallyRenewLease() {
 
-	d.sendHeartbeats = true
+	d.sendHeartbeats.Store(true)
 
 	for true {
 
 		logrus.Debugf("Waiting for %s", d.HeartbeatPeriod)
 		time.Sleep(d.HeartbeatPeriod)
 
-		if !d.sendHeartbeats {
+		if !d.sendHeartbeats.Load() {
 			break
 		}
 
